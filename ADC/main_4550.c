@@ -60,7 +60,6 @@ void init_ports() {
     ADCON1bits.VCFG = 0b00; //Voltage reference configuration. 00 = Vss, Vdd.
     ADCON1bits.PCFG = 0b1110; //A/D Port Configuration Control bits. 1111= AN0 Analoge
 
-    ADCON0bits.CHS = 0b0000; // Analog Channel Select bits. 0000 = Channel 0 (AN0/RA0)
     ADCON0bits.ADON = 0b0;  // A/D On. 0 = A/D converter module is disabled
 
     CMCON = 0x07;           //Comparators OFF
@@ -83,6 +82,7 @@ void main(void) {
         __delay_ms(On_Led);
 
         //-----------  ADC conversion (START) ----------------- 
+        ADCON0bits.CHS = 0b0000; // Analog Channel Select bits. 0000 = Channel 0 (AN0/RA0)
         ADCON0bits.ADON = 0b1; // A/D On.1 = A/D converter module is enabled
         ADCON0bits.GO = 0b1; //Start conversion
 
