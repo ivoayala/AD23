@@ -64,7 +64,6 @@ void init_ports(){
     
     ANSELA = 0b00000001;      //ANSA<5><3:1> digital buffer enabled. ANSA<0> Digital input buffer disabled
     
-    ADCON0bits.CHS = 0b00000; // Analog Channel Select bits. 00000 = AN0/RA0
     ADCON0bits.ADON = 0b0;  // A/D On. 0 = ADC is disabled and consumes no operating current
            
 }
@@ -82,6 +81,7 @@ void main(void) {
         __delay_ms(On_Led);
 
         //-----------  ADC conversion (START) ----------------- 
+        ADCON0bits.CHS = 0b00000; // Analog Channel Select bits. 00000 = AN0/RA0
         ADCON0bits.ADON = 0b1; // A/D On.1 = A/D converter module is enabled
         ADCON0bits.GO = 0b1; //Start conversion
 
