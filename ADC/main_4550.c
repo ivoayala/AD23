@@ -87,7 +87,7 @@ void main(void) {
         ADCON0bits.GO = 0b1; //Start conversion
 
         /*wait for End of conversion Go=1 conversion completed*/
-        while (ADCON0bits.GO == 0);
+        while (ADCON0bits.GO == 1);
 
         LATB = ADRESL;          //Move ADC data to PORTB and PORTC
         LATC = ADRESH;
