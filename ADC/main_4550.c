@@ -63,6 +63,7 @@ void init_ports() {
     ADCON0bits.ADON = 0b0;  // A/D On. 0 = A/D converter module is disabled
 
     CMCON = 0x07;           //Comparators OFF
+    
     TRISA = 0b00000001;     //Port A direction. RA0/AN0 as input
     TRISB = 0b00000000;     //Port B 
     TRISC = 0b00000000;     //Port C direction
