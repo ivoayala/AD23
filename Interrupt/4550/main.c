@@ -13,9 +13,6 @@
 //-----------PORT pins-----------------
 #define LedA_0      LATAbits.LA0        /*Use "LATA" to set value to port (output) */
 #define LedA_1      LATAbits.LA1        /*Use "LATA" to set value to port (output) */
-#define LedA_2      LATAbits.LA2        /*Use "LATA" to set value to port (output) */
-#define LedA_3      LATAbits.LA3        /*Use "LATA" to set value to port (output) */
-#define LedA_4      LATAbits.LA4        /*Use "LATA" to set value to port (output) */
 #define LedA_5      LATAbits.LA5        /*Use "LATA" to set value to port (output) */
 #define LedA_6      LATAbits.LA6        /*Use "LATA" to set value to port (output) */
 #define SW1         PORTBbits.RB0       /*Use "PORTB" to read value from port (input) */
@@ -42,21 +39,27 @@ void init_ports(){
     ADON = 0;           //A/D converter is disabled
     CMCON = 0x07;       //Comparators OFF
     TRISA = 0b00000000; //Port A direction
-    TRISB = 0b00000001; //Port B direction
+    TRISB = 0b00000011; //Port B direction
 }
 
 void Config_Interrupts(){       //Configure Interrupts
-    INTCONbits.INT0IE = 0b1;    //INT0IE: INT0 External Interrupt Enable bit. 1 = Enables the INT0 external interrupt
-    INTCON2bits.INTEDG0 = 0b1;  //INTEDG0: External Interrupt 0 Edge Select bit. 1 = Interrupt on rising edge
+    INT0IE = 0b1;               //INT0IE: INT0 External Interrupt Enable bit. 1 = Enables the INT0 external interrupt
+    INTEDG0 = 0b1;              //INTEDG0: External Interrupt 0 Edge Select bit. 1 = Interrupt on rising edge
 }
 
 void __interrupt(high_priority) MyInterruptRoutine(void){       //Interrupt Service Routine
-    INTCONbits.INT0IF = 0b0;     //Clear external interrupt flag
-    LedA_5 = 1;           /* Turn on */
-    LedA_6 = 1;
-    __delay_ms(On_Led);
-    LedA_5 = 0;           /* Turn off */
-    LedA_6 = 0;
+    GIE = 0b0;                  //Disable Global Interrupt Enable bit. 
+    
+    if(INT0IF == 0b1){          //Check if External Interrupt 0 caused the interrupt
+        INT0IF = 0b0;           //Clear external interrupt flag
+        LedA_5 = 1;             /* Turn on */
+        LedA_6 = 1;
+        __delay_ms(On_Led);
+        LedA_5 = 0;             /* Turn off */
+        LedA_6 = 0;
+    }
+    
+    GIE = 0b1;                  //Enable Global Interrupt Enable bit. 
 }
 
 //-----------MAIN-----------------
@@ -66,7 +69,7 @@ void main(void) {
     init_ports();                   //Initialize ports
     Config_Interrupts();            //Configure Interrupts
     
-    INTCONbits.GIE = 0b1;           //Global Interrupt Enable bit. 
+    GIE = 0b1;                      //Enable Global Interrupt Enable bit. 
     
     
     while(1){         
@@ -82,4 +85,3 @@ void main(void) {
     return;
 
 }
-
