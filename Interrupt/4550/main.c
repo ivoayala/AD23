@@ -47,7 +47,7 @@ void Config_Interrupts(){       //Configure Interrupts
     INTEDG0 = 0b1;              //INTEDG0: External Interrupt 0 Edge Select bit. 1 = Interrupt on rising edge
 }
 
-void __interrupt(high_priority) MyInterruptRoutine(void){       //Interrupt Service Routine
+void __interrupt() MyInterruptRoutine(void){       //Interrupt Service Routine
     GIE = 0b0;                  //Disable Global Interrupt Enable bit. 
     
     if(INT0IF == 0b1){          //Check if External Interrupt 0 caused the interrupt
